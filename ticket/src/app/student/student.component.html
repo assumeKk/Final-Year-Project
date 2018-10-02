@@ -1,0 +1,21 @@
+<div *ngIf="!connected" style="margin: 16px;" class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-4">
+        <h1> Current live lab list</h1>
+        <div *ngFor="let lab of labs | idParser : 'lab-live'">
+          <div (click)="selectLab(lab)" class="btn btn-dark btn-block">{{lab | labName | async }}</div>
+          <br>
+        </div>
+      </div>
+      <div class="col-8">
+        <div *ngFor="let lab of labs">
+          <div *ngIf="currentSelectedLab == lab" class="card">
+            <app-labroom [lab]="lab"> </app-labroom>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

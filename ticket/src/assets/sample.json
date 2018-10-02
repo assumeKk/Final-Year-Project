@@ -1,0 +1,170 @@
+{
+    "Labrooms": [
+        {
+            "name": "test123"
+        },
+        {
+            "name": "test223"
+        }
+    ],
+    "Users": [
+        {
+            "email": "Jerry@student.com",
+            "role": 1,
+            "displayName": "Jerry 123"
+        }
+    ],
+    "Labs": [
+        {
+            "days": {
+                "20180416": {
+                    "attendingList": {
+                        "0VlMyIYgpEbDJUUvRFVFZHMs0xo1": "disconnect",
+                        "KGyvqsOFUPam6uWYDardzEo3KZC3": {
+                            "connectedTime": 1523901160107
+                        }
+                    },
+                    "queueHistory": {
+                        "0VlMyIYgpEbDJUUvRFVFZHMs0xo1": {
+                            "1523902199200": {
+                                "waitingTime": 1000
+                            },
+                            "1523902319950": {
+                                "waitingTime": 1000
+                            },
+                            "1523902332317": {
+                                "waitingTime": 1000
+                            },
+                            "1523902354964": {
+                                "waitingTime": 1000
+                            },
+                            "1523904618067": {
+                                "waitingTime": -1
+                            },
+                            "1523904626402": {
+                                "waitingTime": -1
+                            }
+                        },
+                        "KGyvqsOFUPam6uWYDardzEo3KZC3": {
+                            "1523901220631": {
+                                "waitingTime": 1000
+                            }
+                        }
+                    }
+                },
+                "20180418": {
+                    "attendingList": {
+                        "0VlMyIYgpEbDJUUvRFVFZHMs0xo1": {
+                            "connectedTime": 1524043913333
+                        },
+                        "9NtPPtqB1eXbH5eda6TKvFOKtt33": {
+                            "connectedTime": 1524043945331
+                        },
+                        "KGyvqsOFUPam6uWYDardzEo3KZC3": {
+                            "connectedTime": 1524073604848
+                        }
+                    },
+                    "queueHistory": {
+                        "0VlMyIYgpEbDJUUvRFVFZHMs0xo1": {
+                            "1524043999106": {
+                                "waitingTime": 18621
+                            },
+                            "1524045430032": {
+                                "waitingTime": -1
+                            },
+                            "1524045468510": {
+                                "waitingTime": 144954
+                            },
+                            "1524045620899": {
+                                "waitingTime": -1
+                            },
+                            "1524046049734": {
+                                "waitingTime": 7345
+                            }
+                        },
+                        "9NtPPtqB1eXbH5eda6TKvFOKtt33": {
+                            "1524044003781": {
+                                "waitingTime": 7280
+                            },
+                            "1524045595228": {
+                                "waitingTime": 35655
+                            }
+                        },
+                        "KGyvqsOFUPam6uWYDardzEo3KZC3": {
+                            "1524070645251": {
+                                "helpedBy": "nyjyq12K9iUzIqo0evbpZvpZ96N2",
+                                "rate": 9,
+                                "waitingTime": 159343
+                            },
+                            "1524071981136": {
+                                "helpedBy": "KGyvqsOFUPam6uWYDardzEo3KZC3",
+                                "waitingTime": -1
+                            },
+                            "1524073201129": {
+                                "helpedBy": "nyjyq12K9iUzIqo0evbpZvpZ96N2",
+                                "rate": 4,
+                                "waitingTime": 2796
+                            },
+                            "1524073616326": {
+                                "helpedBy": "KGyvqsOFUPam6uWYDardzEo3KZC3",
+                                "waitingTime": -1
+                            }
+                        }
+                    }
+                }
+            },
+            "defaultRoom": "-L9zl0Sb31eMImb1Nezt",
+            "endDate": "2018-11-25",
+            "endHour": "24",
+            "id": "",
+            "name": "AI WILL RUN THE WORLD TEST",
+            "room": "-L9uyvQKWVo0mLrjIire",
+            "slots": [
+                {
+                    "endHour": "24",
+                    "room": "-L9uyvQKWVo0mLrjIire",
+                    "startHour": "17",
+                    "weekday": "6"
+                },
+                {
+                    "endHour": "24",
+                    "room": "-L9uyvQKWVo0mLrjIire",
+                    "startHour": "17",
+                    "weekday": "6"
+                },
+                {
+                    "endHour": "24",
+                    "room": "-L9uyvQKWVo0mLrjIire",
+                    "startHour": "10",
+                    "weekday": "3"
+                }
+            ],
+            "startDate": "2018-04-05",
+            "startHour": "10",
+            "studentList": {
+                "0VlMyIYgpEbDJUUvRFVFZHMs0xo1": {
+                    "enrolledTime": 1524045850156
+                },
+                "9NtPPtqB1eXbH5eda6TKvFOKtt33": {
+                    "enrolledTime": 1523906186908
+                },
+                "JeXmuRQcyGhij8XNxSNNYvw9IrA2": {
+                    "enrolledTime": 1523900977867
+                },
+                "KGyvqsOFUPam6uWYDardzEo3KZC3": {
+                    "enrolledTime": 1523900980221
+                },
+                "VuTGfzGzbocJl5bs9H9HGHgzdg52": {
+                    "enrolledTime": 1523900982009
+                },
+                "bDNUeC8LVtTKKhqnEeaMhVhTMW23": {
+                    "enrolledTime": 1523900985670
+                },
+                "nUW87rYaHjXtTw0rWi5gB9HVdAD3": {
+                    "enrolledTime": 1523900990815
+                }
+            },
+            "weekDay": "3"
+        }
+    ]
+}

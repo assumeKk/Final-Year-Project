@@ -1,0 +1,4 @@
+<span style="font-size:16px;padding: 5px" class="badge badge-pill badge-info label"> {{dateObj?.weekday | week}} {{dateObj?.startHour}}-{{dateObj?.endHour}} {{dateObj?.room | idParser:'labroom' | async}}
+    <span (click)="removeMe()" style="float: right;" class="badge badge-pill badge-danger">remove</span>
+
+</span>

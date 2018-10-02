@@ -1,0 +1,13 @@
+<!-- different users will get display different content -->
+<!-- if student user -->
+<div *ngIf="canActivate(1)">
+  <app-student></app-student>
+</div>
+<!-- if TA user -->
+<div *ngIf="canActivate(2)">
+  <app-ta></app-ta>
+</div>
+<!-- if admin user -->
+<div *ngIf="canActivate(3)">
+  <app-admin></app-admin>
+</div>

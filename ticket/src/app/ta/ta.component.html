@@ -1,0 +1,6 @@
+<div *ngIf="labs">
+  <h1> Current Live lab</h1>
+  <div *ngFor="let lab of labs | idParser :'lab-live'">
+    <app-ta-labroom [lab]="lab"></app-ta-labroom>
+  </div>
+</div>

@@ -1,0 +1,752 @@
+<div class="container">
+  <h1> Admin Dashboard </h1>
+
+
+  <div class="row">
+    <div class="col-3">
+
+      <div class="btn btn-outline-dark btn-block tablinks active" (click)="openTab($event, 'create_user')">Create User</div>
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'edit_user')">Edit User</div>
+      <!-- <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'import_users')">Import Users</div> -->
+
+
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'create_lab')">Create Lab</div>
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'edit_lab')">Edit Lab</div>
+      <!-- <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'import_labs')">Import Labs</div> -->
+
+
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'create_labroom')">Create Labroom</div>
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'edit_labroom')">Edit Labroom</div>
+      <!-- <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'import_labrooms')">Import Labrooms</div> -->
+
+      <div class="btn btn-outline-dark btn-block tablinks" (click)="openTab($event, 'view_report')">View Report</div>
+
+    </div>
+
+    <div class="col-9">
+
+
+      <div id="create_user" class="tabcontent">
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="userForm">
+
+              <div class="form-group">
+                <input type="text" formControlName="email" class="form-control" placeholder="Enter user email here" id="name" required>
+              </div>
+
+
+              <div class="form-group">
+                <input type="text" formControlName="displayName" class="form-control" placeholder="Enter user display name here" id="name"
+                  required>
+              </div>
+
+              <div class="form-group">
+
+                <select formControlName="role" class="form-control">
+                  <option value="">Select a role</option>
+                  <option value=1>Student</option>
+                  <option value=2>Teaching Assistant</option>
+                </select>
+
+              </div>
+
+              <div *ngIf="labRef" class="form-group">
+                <angular2-multiselect (onSelect)="onItemSelect($event)" [data]="dropdownList" formControlName="labList" [settings]="dropdownSettings">
+                </angular2-multiselect>
+              </div>
+
+
+            </form>
+
+            <button type="submit" (click)="createUser()" class="btn btn-success btn-block">Create</button>
+            <pre>{{ userForm.value | json}}</pre>
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+      <div id="edit_user" class="tabcontent">
+        <div class="row">
+          <div class="col">
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">User list ({{userListSize}})</h5>
+                <div class="card-text">
+
+
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Display Name</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody *ngIf="userRef">
+                      <tr *ngFor="let key of userRef | keys">
+
+                        <td>{{userRef[key].email}}</td>
+                        <td>{{userRef[key].displayName}}</td>
+                        <td>{{userRef[key].role}}</td>
+                        <td>
+                          <div (click)="updateObject(API_CALL.DELETE_USER,key)" class="btn btn-outline-danger" style="float: right;"> Remove</div>
+                          <div (click)="editUser(key,userRef[key])" class="btn btn-outline-success" style="float: right;"> Edit</div>
+                        </td>
+
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col">
+
+
+            <div class="card">
+              <div class="card-body">
+                <form [formGroup]="userForm">
+
+                  <div class="form-group">
+                    <input type="text" formControlName="email" class="form-control" placeholder="Enter user email here" id="name" required>
+                  </div>
+
+
+                  <div class="form-group">
+                    <input type="text" formControlName="displayName" class="form-control" placeholder="Enter user display name here" id="name"
+                      required>
+                  </div>
+
+                  <div class="form-group">
+
+                    <select formControlName="role" class="form-control">
+                      <option value="">Select a role</option>
+                      <option value=1>Student</option>
+                      <option value=2>Teaching Assistant</option>
+                    </select>
+
+                  </div>
+
+                  <div *ngIf="labRef" class="form-group">
+                    <angular2-multiselect (onSelect)="onItemSelect($event)" [data]="dropdownList" formControlName="labList" [settings]="dropdownSettings">
+                    </angular2-multiselect>
+                  </div>
+
+
+                </form>
+
+                <button type="submit" (click)="updateObject(API_CALL.UPDATE_USER,this.currentEditingUser,this.userForm.value)" class="btn btn-success btn-block">Update</button>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div id="import_users" class="tabcontent">
+        <div class="form-group">
+          <label for="file">Choose File</label>
+          <input type="file" id="file" (change)="uploadFile($event.target.files,'users')">
+          <div *ngIf="newUserList" class="card">
+            <div class="card-body">
+              <h5 class="card-title">New user list</h5>
+              <div class="card-text">
+
+                <div (click)="uploadUsers()" class="btn btn-outline-secondary">Create</div>
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th *ngFor="let key of newUserList['Users'][0] | keys as objKeys" scope="col">{{key}}</th>
+
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr *ngFor="let item of newUserList['Users']">
+
+
+                      <!-- {{ item | json}} -->
+                      <td *ngFor="let key of newUserList['Users'][0] | keys">
+                        <span *ngIf="item[key]"> {{item[key]}} </span>
+                      </td>
+
+                    </tr>
+
+
+
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="create_lab" class="tabcontent">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-text">
+
+              <h1>Create Lab</h1>
+              <form [formGroup]="labForm">
+                <div class="form-group">
+                  <input type="text" formControlName="name" class="form-control" placeholder="Enter lab name here" id="name" required>
+                </div>
+
+
+
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-3 col-form-label">Start date </label>
+                  <div class="col-sm-9">
+                    <input formControlName="startDate" class="form-control" type="date">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-3 col-form-label">End date </label>
+                  <div class="col-sm-9">
+                    <input formControlName="endDate" class="form-control" type="date">
+                  </div>
+                </div>
+
+
+
+
+                <div *ngIf="labRoomRef" class="form-group row">
+                  <div class="col">
+
+                    <select formControlName="defaultRoom" class="form-control">
+                      <option value="">Select a default lab room</option>
+                      <option *ngFor="let room of labRoomRef | keys " value="{{room}}"> {{ labRoomRef[room].name }}</option>
+
+                    </select>
+                  </div>
+
+                </div>
+
+                <div class="form-group row">
+                  <div class="col">
+                    <select formControlName="weekDay" class="form-control">
+                      <option value=''>Pick a week day</option>
+                      <option value='1'>Monday</option>
+                      <option value='2'>Tuesday</option>
+                      <option value='3'>Wednesday</option>
+                      <option value='4'>Thursday</option>
+                      <option value='5'>Friday</option>
+                      <option value='6'>Sat</option>
+                      <option value='7'>Sunday</option>
+                    </select>
+
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col">
+                    <select formControlName="startHour" class="form-control">
+                      <option value=''>Pick a start time</option>
+                      <option *ngFor="let obj of dateObj" value='{{obj.name}}'>{{obj.name}}</option>
+                    </select>
+
+                  </div>
+                </div>
+
+
+
+
+                <div class="form-group row">
+                  <div class="col">
+                    <select formControlName="endHour" class="form-control">
+                      <option value=''>Pick a end time</option>
+                      <option *ngFor="let obj of dateObj" value='{{obj.name}}'>{{obj.name}}</option>
+
+                    </select>
+
+                  </div>
+                </div>
+
+
+                <div *ngIf="labRoomRef" class="form-group row">
+                  <div class="col">
+
+                    <select formControlName="room" class="form-control">
+                      <option value="">Select a lab room</option>
+                      <option *ngFor="let room of labRoomRef | keys " [value]="room"> {{ labRoomRef[room].name }}</option>
+
+                    </select>
+                  </div>
+
+                </div>
+                <div class="form-group row">
+
+
+                  <div class="col">
+                    <div (click)="addSlot()" class="btn btn-outline-dark btn-block"> Add slot </div>
+                  </div>
+                </div>
+
+                <div *ngIf="labForm.value['slots']" class="form-group row">
+                  <div class="col">
+                    <div *ngFor="let obj of labForm.value['slots'];  let i = index">
+
+                      <app-datelabel [dateObj]="obj" (remove)="remove(index)" [dateRef]="dateObj"> </app-datelabel>
+                    </div>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+
+
+            <button (click)="createLab()" type="submit" class="btn btn-success btn-block">Create</button>
+
+
+            <pre> 
+                {{ labForm.value | json}}
+              </pre>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <div id="edit_lab" class="tabcontent">
+
+
+        <div class="card">
+          <div class="row">
+
+            <div class="col">
+              <div class="card-body">
+                <div class="card-text">
+
+
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Lab name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody *ngIf="labList$">
+                      <tr *ngFor="let obj of labList$ | async">
+                        <td>{{ obj.name }}
+                        </td>
+                        <td>
+                          <div (click)="updateObject(API_CALL.DELETE_LAB,obj.key)" class="btn btn-outline-danger" style="float: right;"> Remove</div>
+                          <div (click)="updateObject(API_CALL.EDIT_LAB,obj.key,obj)" class="btn btn-outline-success" style="float: right;"> Edit</div>
+                        </td>
+
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col">
+              <div class="card-body">
+                <div class="card-text">
+
+                  <form [formGroup]="labForm">
+                    <div class="form-group">
+                      <input type="text" formControlName="name" class="form-control" placeholder="Enter lab name here" id="name" required>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-3 col-form-label">Start date </label>
+                      <div class="col-sm-9">
+                        <input formControlName="startDate" class="form-control" type="date">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-3 col-form-label">End date </label>
+                      <div class="col-sm-9">
+                        <input formControlName="endDate" class="form-control" type="date">
+                      </div>
+                    </div>
+
+
+
+
+                    <div *ngIf="labRoomRef" class="form-group row">
+                      <div class="col">
+
+                        <select formControlName="defaultRoom" class="form-control">
+                          <option value="">Select a default lab room</option>
+                          <option *ngFor="let room of labRoomRef | keys " value="{{room}}"> {{ labRoomRef[room].name }}</option>
+
+                        </select>
+                      </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col">
+                        <select formControlName="weekDay" class="form-control">
+                          <option value=''>Pick a week day</option>
+                          <option value='1'>Monday</option>
+                          <option value='2'>Tuesday</option>
+                          <option value='3'>Wednesday</option>
+                          <option value='4'>Thursday</option>
+                          <option value='5'>Friday</option>
+                          <option value='6'>Sat</option>
+                          <option value='0'>Sunday</option>
+                        </select>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col">
+                        <select formControlName="startHour" class="form-control">
+                          <option value=''>Pick a start time</option>
+                          <option *ngFor="let obj of dateObj" value='{{obj.name}}'>{{obj.name}}</option>
+                        </select>
+
+                      </div>
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+                      <div class="col">
+                        <select formControlName="endHour" class="form-control">
+                          <option value=''>Pick a end time</option>
+                          <option *ngFor="let obj of dateObj" value='{{obj.name}}'>{{obj.name}}</option>
+
+                        </select>
+
+                      </div>
+                    </div>
+
+
+                    <div *ngIf="labRoomRef" class="form-group row">
+                      <div class="col">
+
+                        <select formControlName="room" class="form-control">
+                          <option value="">Select a lab room</option>
+                          <option *ngFor="let room of labRoomRef | keys " [value]="room"> {{ labRoomRef[room].name }}</option>
+
+                        </select>
+                      </div>
+
+                    </div>
+                    <div class="form-group row">
+
+
+                      <div class="col">
+                        <div (click)="addSlot()" class="btn btn-outline-dark btn-block"> Add slot </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="labForm.value['slots']" class="form-group row">
+                      <div class="col">
+                        <div *ngFor="let obj of labForm.value['slots'];  let i = index">
+
+                          <app-datelabel [dateObj]="obj" (remove)="remove(index)" [dateRef]="dateObj"> </app-datelabel>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <button (click)="updateObject(API_CALL.UPDATE_LAB,labForm.value['id'],labForm.value)" type="submit" class="btn btn-success btn-block">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="import_labs" class="tabcontent">
+        <div class="form-group">
+          <label for="file">Choose File</label>
+          <input type="file" id="file" (change)="uploadFile($event.target.files,'labs')">
+          <div *ngIf="labsFile" class="card">
+            <div class="card-body">
+              <h5 class="card-title">New lab list</h5>
+              <div class="card-text">
+
+                <div (click)="uploadLabs()" class="btn btn-outline-secondary">Create</div>
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th *ngFor="let key of labsFile['Labs'][0] | keys as objKeys" scope="col">{{key}}</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr *ngFor="let item of labsFile['Labs']">
+                      <!-- {{ item | json}} -->
+                      <td *ngFor="let key of labsFile['Labs'][0] | keys">
+                        <span *ngIf="item[key]"> {{item[key]}} </span>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="create_labroom" class="tabcontent">
+
+        <div class="card">
+          <div class="card-body">
+            <div class="card-text">
+
+              <h1>Create Lab Room</h1>
+              <form [formGroup]="labRoomForm">
+                <div class="form-group">
+                  <input type="text" formControlName="name" class="form-control" placeholder="Enter lab room name here" id="name" required>
+                </div>
+
+                <pre> 
+                        {{labRoomForm.value | json }}
+                      </pre>
+
+              </form>
+            </div>
+
+
+            <button (click)="createLabRoom()" class="btn btn-success btn-block">Create</button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div id="edit_labroom" class="tabcontent">
+
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                <div class="card-text">
+
+
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Lab room name</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody *ngIf="labRoomRef">
+                      <tr *ngFor="let key of labRoomRef | keys">
+                        <!-- <th scope="row">1</th> -->
+                        <td>{{labRoomRef[key].name}} </td>
+                        <td>
+                          <div (click)="updateObject(API_CALL.DELETE_LABROOM,key)" class="btn btn-outline-danger" style="float: right;"> Remove</div>
+                          <div (click)="updateObject(API_CALL.EDIT_LABROOM,key,labRoomRef[key])" class="btn btn-outline-success" style="float: right;">
+                            Edit
+                          </div>
+                        </td>
+                      </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+
+            <div class="card">
+              <div class="card-body">
+                <div class="card-text">
+
+                  <h1>Create Lab Room</h1>
+                  <form [formGroup]="labRoomForm">
+                    <div class="form-group">
+                      <input type="text" formControlName="name" class="form-control" placeholder="Enter lab room name here" id="name" required>
+                    </div>
+
+                    <pre> 
+                                {{labRoomForm.value | json }}
+                              </pre>
+
+                  </form>
+                </div>
+
+
+                <button (click)="updateObject(API_CALL.UPDATE_LABROOM,'',labRoomForm.value)" class="btn btn-success btn-block">Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <div id="import_labrooms" class="tabcontent">
+        <div class="form-group">
+          <label for="file">Choose File</label>
+          <input type="file" id="file" (change)="uploadFile($event.target.files,'labrooms')">
+          <div *ngIf="labRoomsFile" class="card">
+            <div class="card-body">
+              <h5 class="card-title">New lab list</h5>
+              <div class="card-text">
+
+                <div (click)="uploadLabRooms()" class="btn btn-outline-secondary">Create</div>
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th *ngFor="let key of labRoomsFile['Labrooms'][0] | keys as objKeys" scope="col">{{key}}</th>
+
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr *ngFor="let item of labRoomsFile['Labrooms']">
+                      <!-- {{ item | json}} -->
+                      <td *ngFor="let key of labRoomsFile['Labrooms'][0] | keys">
+                        <span *ngIf="item[key]"> {{item[key]}} </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="view_report" class="tabcontent">
+        <h3>View Report</h3>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Lab name</th>
+              <th scope="col">Overview</th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="reportSummaryRef">
+            <tr *ngFor="let key of reportSummaryRef | keys">
+              <td> Lab Title: {{reportSummaryRef[key].name}}</td>
+
+              <p *ngFor="let day of reportSummaryRef[key]['days'] | keys">
+
+                {{day}}:
+                <br> Overall TA Rating: {{key | idParser:'ta-feedback-rating' : day | async}}
+                <br> Total Help Requested: {{ key | idParser: 'student-help-size' : day | async}}
+                <br> attending rate: {{ key | idParser: 'student-attending-rate' : day | async}}
+                <br> longest waiting time: {{ key | idParser: 'longest-waiting-time' : day | async}}
+                <br> shortest waiting time: {{ key | idParser: 'shortest-waiting-time' : day | async}}
+                <br> average waiting time: {{ key | idParser: 'average-waiting-time' : day | async}}
+              </p>
+
+
+              <td>
+
+                Montly Review
+                <br>
+                <div *ngFor="let item of (key | idParser: 'monthly-attending-rate' | async)">
+                  {{item.month}}: Attendance Rate {{item.averageTime}}
+                  <br> average requests for help: {{item.averageHelp}}
+                  <br>
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+
+    </div>
+
+
+
+
+    <!-- <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-text">
+
+            <div class="container">
+              <h1>Create Semester</h1>
+              <form [formGroup]="semesterForm">
+                <div class="form-group">
+                  <input type="text" formControlName="name" class="form-control" placeholder="Enter user display name here" id="name" required>
+                </div>
+
+                <div class="form-group">
+
+                  <select class="form-control">
+                    <option>Select a role</option>
+                    <option value=1>Teaching Assistant</option>
+                    <option value=2>Student</option>
+                  </select>
+
+                </div>
+
+                <pre> 
+                    {{semesterForm.value | json }}
+                  </pre>
+
+              </form>
+            </div>
+
+          </div>
+          <button type="submit" class="btn btn-success">Create</button>
+          <button type="submit" class="btn btn-warning">Upload Json</button>
+        </div>
+      </div>
+    </div>
+  </div> -->

@@ -1,0 +1,19 @@
+button {
+    margin-top: 20px;
+    font-family: Arial;
+    font-size: 20pt;
+    font-weight: bold;
+    padding: 30px 40px;
+    border-radius: 4px;   
+    background-color: rgb(211, 201, 201);
+    cursor: pointer; cursor: hand;
+    border: none;     
+  }
+  button:hover {
+    background-color: #cadae0;
+  }
+  button:disabled {
+    cursor: auto;
+    background-color: #eee;
+    color: #ccc;    
+  }

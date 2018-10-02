@@ -1,0 +1,59 @@
+<div *ngIf="this.appService.user.role == 1">
+
+  <h1> {{ lab | labName | async}} </h1>
+
+  <div *ngIf="!myCurrentPosition">
+    <div (click)="joinQueue()" class="btn btn-warning"> Help!</div>
+
+  </div>
+
+
+  <div *ngIf="myCurrentPosition">
+    <div>
+      Your current position in the queue is: {{ myCurrentPosition }}
+    </div>
+    <div (click)="leaveQueue()" class="btn btn-danger"> Leave Queue </div>
+    <div> Current waiting time: {{ waitingTime}}</div>
+  </div>
+  <div> Total Queue Size: {{ currentQueueSize }}</div>
+
+  <div>
+    <h3> Leave feedback below</h3>
+    <div *ngFor="let key of queueHistory | keys">
+      <div *ngIf="queueHistory[key]['helpedBy']  != this.appService.user.uid">
+        {{ key }} {{ queueHistory[key]['helpedBy'] | idParser : 'feedback' : 'displayName' | async }}
+        <ngb-rating [(rate)]="queueHistory[key]['rate']"></ngb-rating>
+        <div (click)="uploadRating(key,queueHistory[key])" class="btn btn-outline-primary"> Rate </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="this.appService.user.role == 2">
+
+  <table style="width:100%;" class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Student Name</th>
+        <th scope="col">Waiting Time</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let student of currentHelpQueue">
+        <td>{{student.name}} </td>
+        <td>
+          {{ student.timestamp | waitTime | async}}
+        </td>
+        <td>
+          Remove
+        </td>
+      </tr>
+
+
+    </tbody>
+  </table>
+
+
+</div>

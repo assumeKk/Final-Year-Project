@@ -1,0 +1,18 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+
+
+<!-- As a heading -->
+<nav class="navbar navbar-light bg-light">
+
+  <span class="navbar-brand mb-0 h1">{{this.appService.title}}!
+
+  </span>
+  <div (click)="this.appService.logout()" style="float:right" class="btn btn-primary"> Log out </div>
+
+</nav>
+
+
+<div style="text-align:center">
+  <router-outlet></router-outlet>
+</div>

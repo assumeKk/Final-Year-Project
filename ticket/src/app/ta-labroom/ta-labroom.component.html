@@ -1,0 +1,42 @@
+<div class="container">
+
+  <div class="card">
+    <div class="card-title">
+      {{ labObject?.name }}
+    </div>
+
+    <div class="card-body">
+
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Student name</th>
+            <th scope="col">Waiting time</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="helpQueue">
+          <tr *ngFor="let student of helpQueue | async">
+
+            <td> {{student?.key | idParser: 'student' : 'displayName' | async }}</td>
+            <td>
+              {{ student?.timestamp | waitTime | async}}
+            </td>
+            <td>
+              <div (click)="removeStudent(student)" class="btn btn-outline-info"> Remove</div>
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
